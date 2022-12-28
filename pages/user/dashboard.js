@@ -1,8 +1,9 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material'
-import { Container, width, height } from '@mui/system'
+import { Container, width, height, Box } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import GlobalStyles from '@mui/system';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -13,13 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const sxBotao ={
-  marginBottom: 3,
-}
 
-const sxImagem ={
-  width: 56,
-}
 
 export default function Home() {
   
@@ -29,15 +24,20 @@ export default function Home() {
         <Typography component='h1' variant='h2' marginTop={3} marginBottom={2} align='center'>
           Meus Anúncios
         </Typography>
-        <Button variant='contained' sx={sxBotao} >Publicar novo anúncio</Button>
+        <Box textAlign="center">
+          <Button variant='contained' sx={{marginBottom: 3}}>
+            Publicar novo anúncio</Button>
+        </Box>        
       </Container>
       <Container maxWidth="md">
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
-              <CardMedia title="Titulo da imagem"> 
-                <img src={'https://source.unsplash.com/random'} width="100%" height="200"/>           
-              </CardMedia>
+              <CardMedia
+                sx={{ height: 200 }}
+                image="https://source.unsplash.com/random"
+                title="Nome do Produto"
+              />
               <CardContent>
                 <Typography variant="h5" component="h2">
                   Produto X
@@ -54,9 +54,11 @@ export default function Home() {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
-              <CardMedia title="Titulo da imagem"> 
-                <img src={'https://source.unsplash.com/random'} width="100%" height="200"/>                           
-              </CardMedia>
+              <CardMedia
+                sx={{ height: 200 }}
+                image="https://source.unsplash.com/random"
+                title="Nome do Produto"
+              />
               <CardContent>
                 <Typography variant="h5" component="h2">
                   Produto X
@@ -73,9 +75,11 @@ export default function Home() {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
-              <CardMedia title="Titulo da imagem"> 
-                <img src={'https://source.unsplash.com/random'} width="100%" height="200"/>                           
-              </CardMedia>
+              <CardMedia
+                sx={{ height: 200 }}
+                image="https://source.unsplash.com/random"
+                title="Nome do Produto"
+              />
               <CardContent>
                 <Typography variant="h5" component="h2">
                   Produto X
@@ -92,9 +96,11 @@ export default function Home() {
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
-              <CardMedia title="Titulo da imagem"> 
-                <img src={'https://source.unsplash.com/random'} width="100%" height="200"/>                           
-              </CardMedia>
+              <CardMedia
+                sx={{ height: 200 }}
+                image="https://source.unsplash.com/random"
+                title="Nome do Produto"
+              />
               <CardContent>
                 <Typography variant="h5" component="h2">
                   Produto X
