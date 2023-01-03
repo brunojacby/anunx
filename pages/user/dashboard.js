@@ -3,7 +3,7 @@ import { Container, width, height, Box } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import GlobalStyles from '@mui/system';
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
