@@ -1,10 +1,13 @@
 import { DeleteForever } from '@mui/icons-material'
-import { Button, Icon, IconButton, Select, TextField, Typography } from '@mui/material'
+import { Button, FormControl, Icon, InputLabel, OutlinedInput, InputAdornment, IconButton, Select, TextField, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 import { Box, Container, flexbox } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
 import { useState } from 'react'
 
+const boxContainer = {
+    backgroundColor: 'white',
+}
 
 const BoxTema = {
     backgroundColor: 'white',
@@ -193,7 +196,24 @@ const Publish = () => {
                     >
                     </TextField>
                 </Box>
-            </Container>  
+            </Container> 
+
+             <Container maxWidth="md" className={boxContainer}>
+                <Box sx={BoxTema}>
+                <Typography component="h6" variant="h6" color="textPrimary">
+                    Preço
+                </Typography>
+                <br />
+                <FormControl fullWidth variant='outlined'>
+                    <InputLabel style={{ backgroundColor: 'white'}}>Valor</InputLabel>
+                    <OutlinedInput
+                    onChange={() => {}}
+                    startAdornment={<InputAdornment position='start'>€</InputAdornment>}
+                    labelWidth={40}
+                    /> 
+                </FormControl>
+                </Box>
+            </Container>
 
             <Container maxWidth="md">
                 <Box sx={BoxTema}>
