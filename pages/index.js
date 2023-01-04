@@ -17,7 +17,7 @@ const searchBox = theme => ({
 })
 
 const cardGrid = {
-    backgroundColor: 'blue',
+    
 }
 
 const Home = () => {
@@ -38,7 +38,7 @@ const Home = () => {
                 </Paper>
             </Container>
 
-            <Container maxWidth="md" sx={cardGrid}>
+            <Container maxWidth="lg" sx={cardGrid}>
                 <Typography component="h2" variant='h4' align='center' color='textPrimary'>
                     Destaques
                 </Typography>
