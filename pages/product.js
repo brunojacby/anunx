@@ -1,7 +1,8 @@
-import { Avatar, Card, CardHeader, CardMedia, Chip, Grid, Typography } from "@mui/material"
+import { Avatar, Button, Card, CardHeader, CardMedia, Chip, Grid, Paper, Typography } from "@mui/material"
 import { Box, Container } from "@mui/system"
 import React from "react"
 import TemplateDefault from '../src/templates/Default'
+import Carousel from 'react-material-ui-carousel'
 
 
 const box = {
@@ -30,9 +31,12 @@ const chip = {
 }
 
 const card = {
-    
+    height: '100%',
 }
 
+const cardMedia = {
+    paddingTop: '56%',
+}
 
 
 const Product = () => {
@@ -43,7 +47,32 @@ const Product = () => {
                 <Grid container spacing={3}>
                     <Grid item xs={8}>
                         <Box sx={box}>
-                            Carrossel
+                            <Carousel
+                            autoPlay={false}
+                            animation="slide"
+                            navButtonsAlwaysVisible
+                            navButtonsProps={{
+                                style: {
+                                    
+                                    color: 'white',
+                                }
+                            }}
+                            >
+                                <Card sx={card}>
+                                    <CardMedia 
+                                    sx={cardMedia}
+                                    image="https://source.unsplash.com/random?a=1"
+                                    title="Titulo da imagem"
+                                    />
+                                </Card>
+                                <Card sx={card}>
+                                    <CardMedia 
+                                    sx={cardMedia}
+                                    image="https://source.unsplash.com/random?a=2"
+                                    title="Titulo da imagem"
+                                    />
+                                </Card>                            
+                            </Carousel>
                         </Box>
 
                         <Box sx={box}>
