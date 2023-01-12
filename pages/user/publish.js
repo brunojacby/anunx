@@ -10,7 +10,8 @@ import {
     TextField, 
     Typography, 
     MenuItem, 
-    FormHelperText } from '@mui/material'
+    FormHelperText, 
+    Input} from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 import { Box, Container, flexbox } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
@@ -111,7 +112,11 @@ const Publish = () => {
         .max(100, 'Título muito grande')
         .required('Campo obrigatório'),
 
-        category: yup.string().required('Campo obrigatório')
+        category: yup.string().required('Campo obrigatório'),
+
+        description: yup.string()
+        .min(50, 'Escreva uma descrição com pelo menos 50 caracteres.')
+        .required('Campo obrigatório'),    
     })
 
     return (
@@ -120,7 +125,8 @@ const Publish = () => {
         <Formik
         initialValues={{
             title: '',
-            category: ''
+            category: '',
+            description: ''
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {}}
@@ -147,25 +153,25 @@ const Publish = () => {
 
                     <Container maxWidth="md">
                         <Box sx={BoxTema}>
-                            <Typography component="h6" variant="h6" color="textPrimary" marginBottom={1}>
-                                Título do Anúncio
-                            </Typography>
-                            <TextField
+                       
+                            <FormControl error={errors.title} fullWidth> 
+                            <InputLabel>Título do Anúncio</InputLabel>                          
+                            <Input
                                 name='title'
                                 value={values.title}
                                 onChange={handleChange}
                                 variant="standard"
-                                placeholder="ex.: Bicicleta Aro 18 com garantia"
-                                size='small'
-                                fullWidth
-                                error={errors.title}
-                                helperText={errors.title}
-                            ></TextField>
+                                placeholder="ex.: Bicicleta Aro 18 com garantia"            
+                            />
+                            <FormHelperText>
+                                { errors.title }
+                            </FormHelperText>
+                            </FormControl>
                             <br /><br />
-                            <Typography component="h6" variant="h6" color="textPrimary" marginBottom={1}>
-                                Categoria
-                            </Typography>
+                            
+                            
                             <FormControl error={errors.category} fullWidth>
+                                <InputLabel>Categoria</InputLabel> 
                                 <Select
                                 name="category"
                                 variant="standard"                                
@@ -228,20 +234,20 @@ const Publish = () => {
                     </Container>
 
                     <Container maxWidth="md">
-                        <Box sx={BoxTema}>
-                            <Typography component="h6" variant="h6" color="textPrimary" marginBottom={1}>
-                                Descriçao
-                            </Typography>
-                            <Typography component="h8" variant="h8" color="textPrimary" marginBottom={1}>
-                                Escreva os detalhes do que está vendendo.
-                            </Typography>
-                            <TextField
-                            multiline
-                            rows={6}
-                            variant="outlined"
-                            fullWidth
-                            >
-                            </TextField>
+                        <Box sx={BoxTema}>                            
+                            <FormControl error={errors.description} fullWidth>                                                        
+                                <InputLabel>Escreva os detalhes do que está vendendo.</InputLabel> 
+                                <Input
+                                name="description"
+                                multiline
+                                rows={6}
+                                variant="outlined"                                
+                                >
+                                </Input>
+                                <FormHelperText>
+                                    { errors.description }
+                                </FormHelperText>
+                            </FormControl>
                         </Box>
                     </Container> 
 
