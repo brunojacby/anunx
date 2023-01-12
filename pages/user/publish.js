@@ -1,13 +1,11 @@
-import { DeleteForever } from '@mui/icons-material'
+import { DeleteForever, ErrorSharp } from '@mui/icons-material'
 import { 
     Button, 
     FormControl, 
-    InputLabel, 
-    OutlinedInput, 
+    InputLabel,     
     InputAdornment, 
     IconButton, 
     Select, 
-    TextField, 
     Typography, 
     MenuItem, 
     FormHelperText, 
@@ -88,24 +86,7 @@ const mainImage = {
 }
 
 const Publish = () => {
-    const [files, setFiles] = useState([])
-    const { getRootProps, getInputProps} = useDropzone({
-        accept: 'image/*',
-        onDrop: (acceptedFile) => {
-            const newFiles = acceptedFile.map(file => {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            })
-        setFiles([...files, ...newFiles])
-        }
-    })
-
-    const handleRemoveFile = fileName => {
-        const newFileState = files.filter(file => file.name !== fileName)
-        setFiles(newFileState)
-    }
-
+        
     const validationSchema = yup.object().shape({
         title: yup.string()
         .min(6, 'Escreva um título maior')
@@ -117,31 +98,65 @@ const Publish = () => {
         description: yup.string()
         .min(50, 'Escreva uma descrição com pelo menos 50 caracteres.')
         .required('Campo obrigatório'),    
+
+        price: yup.number().required('Campo obrigatório'),
+
+        email: yup.string().email('Digite um email válido').required('Campo obrigatório'),
+
+        name:  yup.string().required('Campo obrigatório'),
+
+        phone: yup.number().required('Campo obrigatório'),
+
+        files: yup.array().min(1, 'Envie pelo menos uma foto').required('Campo obrigatório'),
     })
 
     return (
-    <TemplateDefault>
-        <Container>
+    <TemplateDefault>        
         <Formik
         initialValues={{
             title: '',
             category: '',
-            description: ''
+            description: '',
+            price: '',
+            email: '',
+            name: '',
+            phone: '',
+            files: [],
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {}}
+        onSubmit={(values) => {console.log('ok, enviado', values)}}
         
         >
             {
                 ({
+                    touched,
                     values,
                     errors,
                     handleChange,
                     handleSubmit,
+                    setFieldValue,
                 }) => {
+                    const { getRootProps, getInputProps} = useDropzone({
+                        accept: 'image/*',
+                        onDrop: (acceptedFile) => {
+                            const newFiles = acceptedFile.map(file => {
+                                return Object.assign(file, {
+                                    preview: URL.createObjectURL(file)
+                                })
+                            })
+                            setFieldValue('files',
+                                [...values.files, ...newFiles])
+                        }
+                    })
+                
+                    const handleRemoveFile = fileName => {
+                        const newFileState = values.files.filter(file => file.name !== fileName)
+                        setFieldValue('files', newFileState)
+                    }
+
                 return (                   
                     
-                    <form>     
+                    <form onSubmit={handleSubmit}>     
                     <Container maxWidth="sm">
                         <Typography component="h1" variant="h2" align='center' color="textPrimary" marginTop={3}>
                             Publicar Anúncio
@@ -154,7 +169,7 @@ const Publish = () => {
                     <Container maxWidth="md">
                         <Box sx={BoxTema}>
                        
-                            <FormControl error={errors.title} fullWidth> 
+                            <FormControl error={errors.title && touched.title} fullWidth> 
                             <InputLabel>Título do Anúncio</InputLabel>                          
                             <Input
                                 name='title'
@@ -164,13 +179,13 @@ const Publish = () => {
                                 placeholder="ex.: Bicicleta Aro 18 com garantia"            
                             />
                             <FormHelperText>
-                                { errors.title }
+                                { errors.title && touched.title ? errors.title : null }
                             </FormHelperText>
                             </FormControl>
                             <br /><br />
                             
                             
-                            <FormControl error={errors.category} fullWidth>
+                            <FormControl error={errors.category && touched.category} fullWidth>
                                 <InputLabel>Categoria</InputLabel> 
                                 <Select
                                 name="category"
@@ -186,29 +201,34 @@ const Publish = () => {
                                 <MenuItem value={"Desporto"}>Desporto</MenuItem>
                                 </Select>
                                 <FormHelperText>
-                                    { errors.category }
+                                    { errors.category && touched.category ? errors.category : null }
                                 </FormHelperText>
                             </FormControl>
                         </Box>
                     </Container>
 
                     <Container maxWidth="md">
-                        <Box sx={BoxTema}>
-                            <Typography component="h6" variant="h6" color="textPrimary" marginBottom={1}>
+                        <Box sx={BoxTema}>                            
+                            <Typography component="h6" variant="h6" color={errors.files && touched.files ? 'error' : 'textPrimary'} marginBottom={1}>
                                 Imagens
                             </Typography>
-                            <Typography component="h8" variant="h8" color="textPrimary" marginBottom={1}>
+                            <Typography component="h8" variant="h8" color={errors.files && touched.files ? 'error' : 'textPrimary'} marginBottom={1}>
                                 A primeira imagem é a foto principal do seu anúncio.
                             </Typography>
+                            {
+                                errors.files && touched.files
+                                ?   <Typography variant='body2' color='error' gutterBottom>{errors.files}</Typography>
+                                : null
+                            }                            
                             <Box className={'thumbsContainer'} sx={thumbsContainer}>
-                                <Box  className={'dropzone'} sx={dropzone}>
-                                <Typography variant='body2' color={'textPrimary'} className={dropzone} {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    Clique para adicionar ou arraste a imagem para aqui.
-                                </Typography>
+                                <Box  className={'dropzone'} sx={dropzone}> 
+                                    <input name="files" {...getInputProps()} />                                   
+                                    <Typography variant='body2' color={errors.files && touched.files ? 'error' : 'textPrimary'} className={dropzone} {...getRootProps()}>
+                                        Clique para adicionar ou arraste a imagem para aqui.
+                                    </Typography>
                                 </Box>
                                 {
-                                    files.map((file, index) => (
+                                    values.files.map((file, index) => (
                                         <Box 
                                         key={file.name}
                                         className={'thumb'} style={{ backgroundImage: `url(${file.preview})`}} sx={thumb}
@@ -235,17 +255,18 @@ const Publish = () => {
 
                     <Container maxWidth="md">
                         <Box sx={BoxTema}>                            
-                            <FormControl error={errors.description} fullWidth>                                                        
+                            <FormControl error={errors.description && touched.description} fullWidth>                                                        
                                 <InputLabel>Escreva os detalhes do que está vendendo.</InputLabel> 
                                 <Input
                                 name="description"
                                 multiline
                                 rows={6}
-                                variant="outlined"                                
+                                variant="outlined"
+                                onChange={handleChange}                                
                                 >
                                 </Input>
                                 <FormHelperText>
-                                    { errors.description }
+                                    { errors.description && touched.description ? errors.description : null }
                                 </FormHelperText>
                             </FormControl>
                         </Box>
@@ -253,18 +274,19 @@ const Publish = () => {
 
                     <Container maxWidth="md" className={boxContainer}>
                         <Box sx={BoxTema}>
-                        <Typography component="h6" variant="h6" color="textPrimary">
-                            Preço
-                        </Typography>
-                        <br />
-                        <FormControl fullWidth variant='outlined'>
-                            <InputLabel style={{ backgroundColor: 'white'}}>Valor</InputLabel>
-                            <OutlinedInput
-                            onChange={() => {}}
-                            startAdornment={<InputAdornment position='start'>€</InputAdornment>}
-                            labelWidth={40}
-                            /> 
-                        </FormControl>                        
+                            <FormControl error={errors.price && touched.price} fullWidth>                                                        
+                                <InputLabel>Preço de venda</InputLabel> 
+                                <Input
+                                name="price"                                
+                                variant="outlined"
+                                startAdornment={<InputAdornment position='start'>€</InputAdornment>}  
+                                onChange={handleChange}                            
+                                >
+                                </Input>
+                                <FormHelperText>
+                                    { errors.price && touched.price ? errors.price : null }
+                                </FormHelperText>
+                            </FormControl>                                                
                         </Box>
                     </Container>
 
@@ -273,26 +295,46 @@ const Publish = () => {
                             <Typography component="h6" variant="h6" color="textPrimary" gutterBottom>
                                 Dados de Contato
                             </Typography>
-                            <TextField
-                            label="Nome"
-                            variant="outlined"
-                            size='small'
-                            fullWidth
-                            />
+
+                            <FormControl error={errors.name && touched.name } fullWidth> 
+                                <InputLabel>Nome</InputLabel>                          
+                                <Input
+                                    name='name'
+                                    value={values.name}
+                                    onChange={handleChange}                                          
+                                />
+                                <FormHelperText>
+                                    { errors.name && touched.name ? errors.name : null }
+                                </FormHelperText>
+                            </FormControl>
                             <br /><br />
-                            <TextField
-                            label="E-mail"
-                            variant="outlined"
-                            size='small'
-                            fullWidth
-                            />
+
+                            <FormControl error={errors.email && touched.email } fullWidth> 
+                                <InputLabel>E-mail</InputLabel>                          
+                                <Input
+                                    name='email'
+                                    value={values.email}
+                                    onChange={handleChange}                                          
+                                />
+                                <FormHelperText>
+                                    { errors.email && touched.email ? errors.email : null }
+                                </FormHelperText>
+                            </FormControl>
                             <br /><br />
-                            <TextField
-                            label="Telefone"
-                            variant="outlined"
-                            size='small'
-                            fullWidth
-                            />
+
+                            <FormControl error={errors.phone && touched.phone } fullWidth> 
+                                <InputLabel>Telemóvel</InputLabel>                          
+                                <Input
+                                    name='phone'
+                                    value={values.phone}
+                                    onChange={handleChange}                                          
+                                />
+                                <FormHelperText>
+                                    { errors.phone && touched.phone ? errors.phone : null }
+                                </FormHelperText>
+                            </FormControl>
+                            <br /><br />                            
+                           
                         </Box>
                     </Container>
 
@@ -307,7 +349,7 @@ const Publish = () => {
                 }
             }
         </Formik>
-        </Container>      
+              
     </TemplateDefault>
     )
 }
