@@ -1,5 +1,16 @@
 import { DeleteForever } from '@mui/icons-material'
-import { Button, FormControl, Icon, InputLabel, OutlinedInput, InputAdornment, IconButton, Select, TextField, Typography } from '@mui/material'
+import { 
+    Button, 
+    FormControl, 
+    InputLabel, 
+    OutlinedInput, 
+    InputAdornment, 
+    IconButton, 
+    Select, 
+    TextField, 
+    Typography, 
+    MenuItem, 
+    FormHelperText } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 import { Box, Container, flexbox } from '@mui/system'
 import TemplateDefault from '../../src/templates/Default'
@@ -99,15 +110,17 @@ const Publish = () => {
         .min(6, 'Escreva um título maior')
         .max(100, 'Título muito grande')
         .required('Campo obrigatório'),
+
+        category: yup.string().required('Campo obrigatório')
     })
 
     return (
     <TemplateDefault>
         <Container>
-
         <Formik
         initialValues={{
-            title: 'teste'
+            title: '',
+            category: ''
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {}}
@@ -152,24 +165,24 @@ const Publish = () => {
                             <Typography component="h6" variant="h6" color="textPrimary" marginBottom={1}>
                                 Categoria
                             </Typography>
-                            <Select
-                            variant="standard"
-                            native
-                            value=""
-                            fullWidth
-                            /*onChange={handleChangeCategory}*/
-                            inputProps={{
-                                name: 'age',
-                            }}
-                            >
-                                <option value={0}>Selecione</option>
-                                <option value={1}>Lazer</option>
-                                <option value={2}>Telemóveis e Tablets</option>
-                                <option value={3}>Agricultura</option>
-                                <option value={4}>Animais</option>
-                                <option value={5}>Desporto</option>
-
-                            </Select>
+                            <FormControl error={errors.category} fullWidth>
+                                <Select
+                                name="category"
+                                variant="standard"                                
+                                value={values.category}
+                                fullWidth                            
+                                onChange={handleChange}                            
+                                >                                                                    
+                                <MenuItem value={"Lazer"}>Lazer</MenuItem>
+                                <MenuItem value={"Telemóveis  e Tablets"}>Telemóveis e Tablets</MenuItem>
+                                <MenuItem value={"Agricultura"}>Agricultura</MenuItem>
+                                <MenuItem value={"Animais"}>Animais</MenuItem>
+                                <MenuItem value={"Desporto"}>Desporto</MenuItem>
+                                </Select>
+                                <FormHelperText>
+                                    { errors.category }
+                                </FormHelperText>
+                            </FormControl>
                         </Box>
                     </Container>
 
@@ -245,7 +258,7 @@ const Publish = () => {
                             startAdornment={<InputAdornment position='start'>€</InputAdornment>}
                             labelWidth={40}
                             /> 
-                        </FormControl>
+                        </FormControl>                        
                         </Box>
                     </Container>
 
