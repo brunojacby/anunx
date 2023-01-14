@@ -5,16 +5,9 @@ import Head from 'next/head';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../src/theme';
-
+import { ToastyProvider } from '../src/contexts/Toasty';
 export default function MyApp(props) {
   const { Component, pageProps } = props;
-
-  /*useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-  }, []);*/
 
   return (
     <React.Fragment>
@@ -24,9 +17,10 @@ export default function MyApp(props) {
       </Head>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
+          <ToastyProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ToastyProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </React.Fragment>

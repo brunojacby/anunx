@@ -11,33 +11,28 @@ import { useToasty } from '../../../src/contexts/Toasty'
 import {
     initialValues, validationSchema } from './FormValues'
 
-const Signup = () => {
-    const router = useRouter()
-    const {setToasty} = useToasty()
+const Signin = () => {
 
-    const handleFormSubmit = async values => {
-        const response = await axios.post('/api/users', values)
+  const handleFormSubmit = async values => {
+      const response = await axios.post('/api/users', values)
 
-        if (response.data.success) {
-            setToasty({
-              open: true,
-              severity: 'success',
-              text: 'Cadastro realidado com sucesso!'  
-            })
+      if (response.data.success) {
+        setToasty({
+          open: true,
+          severity: 'success',
+          text: 'Logado com sucesso!'  
+        })
 
-            router.push('/auth/signin')
-        }
+        router.push('/user/dashboard')
+      }
     }
 
     return (
         <TemplateDefault>
             <Container maxWidth="sm">
                 <Typography component='h2' variant='h3' marginTop={3} marginBottom={2} align='center'>
-                    Criei sua conta
-                </Typography>
-                <Typography component='h3' variant='h4' marginTop={3} marginBottom={2} align='center'>
-                    E anuncie por todo Portugal
-                </Typography>    
+                    Entre na sua conta
+                </Typography>                   
             </Container>
 
             <Container maxWidth="md">
@@ -57,19 +52,7 @@ const Signup = () => {
                                 isSubmitting,
                             }) => {
                                 return (
-                                 <form onSubmit={handleSubmit}>
-                                   <FormControl sx={FormControlCSS} error={errors.name && touched.name} fullWidth> 
-                                        <InputLabel>Nome</InputLabel>                          
-                                        <Input
-                                            name='name'
-                                            value={values.name}
-                                            onChange={handleChange}                              
-                                        />
-                                        <FormHelperText>
-                                            { errors.name && touched.name ? errors.name : null }
-                                        </FormHelperText>
-                                    </FormControl> 
-
+                                 <form onSubmit={handleSubmit}>                                
                                     <FormControl sx={FormControlCSS} error={errors.email && touched.email } fullWidth> 
                                         <InputLabel>E-mail</InputLabel>                          
                                         <Input
@@ -82,7 +65,6 @@ const Signup = () => {
                                             { errors.email && touched.email ? errors.email : null }
                                         </FormHelperText>
                                     </FormControl>
-
                                     
                                     <FormControl sx={FormControlCSS} error={errors.password && touched.password } fullWidth> 
                                         <InputLabel>Senha</InputLabel>                          
@@ -95,20 +77,7 @@ const Signup = () => {
                                         <FormHelperText>
                                             { errors.password && touched.password ? errors.password : null }
                                         </FormHelperText>
-                                    </FormControl>
-
-                                    <FormControl sx={FormControlCSS} error={errors.passwordConf && touched.passwordConf } fullWidth> 
-                                        <InputLabel>Confirmação de senha</InputLabel>                          
-                                        <Input
-                                            name='passwordConf'
-                                            type="password"
-                                            value={values.passwordConf}
-                                            onChange={handleChange}                                          
-                                        />
-                                        <FormHelperText>
-                                            { errors.passwordConf && touched.passwordConf ? errors.passwordConf : null }
-                                        </FormHelperText>
-                                    </FormControl>
+                                    </FormControl>                                    
                                     <br /><br />
                                     {
                                       isSubmitting
@@ -122,7 +91,7 @@ const Signup = () => {
                                         type='submit' 
                                         color='primary'                                    
                                         >
-                                            Cadastrar
+                                            Entrar
                                         </Button> 
                                       ) 
                                     }                                                           
@@ -134,9 +103,8 @@ const Signup = () => {
                     </Formik>
                 </Box>
             </Container>
-
         </TemplateDefault>        
     )
 }
 
-export default Signup
+export default Signin
