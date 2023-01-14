@@ -5,7 +5,6 @@ import { Formik } from 'formik'
 import { BoxTema, FormControlCSS } from './styles'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-
 import { useToasty } from '../../../src/contexts/Toasty'
 
 import {
@@ -14,17 +13,6 @@ import {
 const Signin = () => {
 
   const handleFormSubmit = async values => {
-      const response = await axios.post('/api/users', values)
-
-      if (response.data.success) {
-        setToasty({
-          open: true,
-          severity: 'success',
-          text: 'Logado com sucesso!'  
-        })
-
-        router.push('/user/dashboard')
-      }
     }
 
     return (
@@ -98,8 +86,7 @@ const Signin = () => {
                                  </form>   
                                 )
                             }
-                        }
-        
+                        }        
                     </Formik>
                 </Box>
             </Container>
