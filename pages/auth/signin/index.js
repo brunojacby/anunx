@@ -1,18 +1,25 @@
-import { Button, CircularProgress, FormControl, FormHelperText, Input, InputLabel, Typography } from '@mui/material'
+import { Alert, Button, CircularProgress, FormControl, FormHelperText, Input, InputLabel, Typography } from '@mui/material'
 import { Box, Container } from '@mui/system'
 import TemplateDefault from '../../../src/templates/Default'
 import { Formik } from 'formik'
 import { BoxTema, FormControlCSS } from './styles'
-import axios from 'axios'
+import { signIn, useSession } from 'next-auth/client'
+import { initialValues, validationSchema } from './FormValues'
 import { useRouter } from 'next/router'
-import { useToasty } from '../../../src/contexts/Toasty'
 
-import {
-    initialValues, validationSchema } from './FormValues'
 
 const Signin = () => {
+    const router = useRouter()
+    console.log(session)
+    
+    const [session] = useSession()
 
   const handleFormSubmit = async values => {
+        signIn('credentials', {
+            email: values.email,
+            password: values.password,
+            callbackUrl: 'http://localhost:3000/user/dashboard',
+        })
     }
 
     return (
@@ -40,7 +47,16 @@ const Signin = () => {
                                 isSubmitting,
                             }) => {
                                 return (
-                                 <form onSubmit={handleSubmit}>                                
+                                 <form onSubmit={handleSubmit}>
+                                    {
+                                        router.query.i === '1'
+                                        ? (
+                                            <Alert severity='error'>
+                                                Usuário ou senha inválidos
+                                            </Alert>
+                                        )
+                                        : null
+                                    }                                
                                     <FormControl sx={FormControlCSS} error={errors.email && touched.email } fullWidth> 
                                         <InputLabel>E-mail</InputLabel>                          
                                         <Input

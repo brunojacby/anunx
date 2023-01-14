@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../src/theme';
 import { ToastyProvider } from '../src/contexts/Toasty';
+import CredentialsProvider from "next-auth/providers/credentials"
+
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
@@ -14,15 +15,15 @@ export default function MyApp(props) {
       <Head>
         <title>Anunx</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-      </Head>
-      <StyledEngineProvider injectFirst>
+      </Head>      
+      <CredentialsProvider session={pageProps.session}> 
         <ThemeProvider theme={theme}>
           <ToastyProvider>
             <CssBaseline />
             <Component {...pageProps} />
           </ToastyProvider>
         </ThemeProvider>
-      </StyledEngineProvider>
+      </CredentialsProvider>       
     </React.Fragment>
   );
 }
