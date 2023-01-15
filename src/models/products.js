@@ -24,11 +24,11 @@ const schema = new mongoose.Schema({
         required: [true, 'O campo "preço" é obrigatório.']
     },
     user: {
-        id: String,
+        //id: String,
         name: String,
         email: String,
         phone: String,
-        image: String,
+       // image: String,
     },
     files: {
         type: [filesSchema],

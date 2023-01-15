@@ -4,8 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 
 export default NextAuth({  
   providers: [      
-    CredentialsProvider({
-      type: 'credentials',      
+    CredentialsProvider({        
       name: 'Credentials',
       async authorize(credentials) {
         await axios.post(`${process.env.APP_URL}/api/auth/signin`, credentials)        

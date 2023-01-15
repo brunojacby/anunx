@@ -24,6 +24,8 @@ const post = async (req, res) => {
         ? files
         : [files]
 
+        const filesToSave = []
+
         filesToRename.forEach(file => {
             const timestamp = Date.now()
             const random = Math.floor(Math.random() * 9999999) + 1
@@ -34,6 +36,11 @@ const post = async (req, res) => {
             const oldpath = file.join(__dirname, '../../../../' + file.path)
             const newpath = file.join(__dirname, '../../../../' + form.uploadDir + '/' + filename)
 
+            filesToSave.push({
+                name: filename,
+                path: newpath,
+            })
+
             fs.rename(oldpath, newpath, (error) => {
                 if (error) {
                     console.log(error)
@@ -43,46 +50,41 @@ const post = async (req, res) => {
         })
 
         res.status(200).json({ success: true })
-    })
 
-    const {
+
+        const {
+            title,
+            category,
+            description,
+            price,
+            name,
+            email,
+            phone,        
+        } = fields
+    
+        const product = new ProductsModel({
         title,
         category,
         description,
         price,
-        name,
-        email,
-        phone,
-        userId,
-        image,
-    } = field
-
-    const product = new ProductsModel({
-    title,
-    category,
-    description,
-    price,
-    user: {
-        id: userId,
-        name,
-        email,
-        phone,
-        image,
-    },
+        user: {        
+            name,
+            email,
+            phone, 
+        }, 
+        files: filesToSave,  
+        })
     
-    files: filesToSave,  
-    })
-
-    const register = await product.save()
-
-    if (register) {
-        res.status(201).json({ success: true })
-      } else {
-        res.status(500).json({ success: false })
-    }
-
+        const register = await product.save()
+    
+        if (register) {
+            res.status(201).json({ success: true })
+          } else {
+            res.status(500).json({ success: false })
+        }
+    
+    })    
 }
-
 
 export {
     post

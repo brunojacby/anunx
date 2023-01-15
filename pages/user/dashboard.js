@@ -38,7 +38,7 @@ const Home = () => {
             subtitle='R$ 50,00'
             actions={
               <>
-              <Button size="small" color='secondary'>Editar</Button>
+              <Button size="small" color='primary'>Editar</Button>
               <Button size="small" color='error'>Remover</Button>
               </>
             }
@@ -51,7 +51,7 @@ const Home = () => {
             subtitle='R$ 50,00'
             actions={
               <>
-              <Button size="small" color='secondary'>Editar</Button>
+              <Button size="small" color='primary'>Editar</Button>
               <Button size="small" color='error'>Remover</Button>
               </>
             }
@@ -64,7 +64,7 @@ const Home = () => {
             subtitle='R$ 50,00'
             actions={
               <>
-              <Button size="small" color='secondary'>Editar</Button>
+              <Button size="small" color='primary'>Editar</Button>
               <Button size="small" color='error'>Remover</Button>
               </>
             }
@@ -77,7 +77,7 @@ const Home = () => {
             subtitle='R$ 50,00'
             actions={
               <>
-              <Button size="small" color='secondary'>Editar</Button>
+              <Button size="small" color='primary'>Editar</Button>
               <Button size="small" color='error'>Remover</Button>
               </>
             }
@@ -89,4 +89,15 @@ const Home = () => {
   )
 }
 
+/* export async function getServerSideProps() {
+  const products = ProductsModel
+  
+  return {
+    props: {
+      products,
+    }
+  }
+} */
+
 export default Home
+
