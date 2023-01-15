@@ -5,11 +5,12 @@ import CredentialsProvider from "next-auth/providers/credentials"
 export default NextAuth({  
   providers: [      
     CredentialsProvider({
+      type: 'credentials',      
       name: 'Credentials',
       async authorize(credentials) {
-        const res = await axios.post(`${process.env.APP_URL}/api/auth/signin`, credentials)        
+        await axios.post(`${process.env.APP_URL}/api/auth/signin`, credentials)        
 
-        const user = await authResponse.json()       
+        const user = res.data      
 
         if (user) {
           return user
@@ -21,6 +22,7 @@ export default NextAuth({
   ],
 
   session: {
+    strategy: 'jwt',
     jwt: true,
   },
 

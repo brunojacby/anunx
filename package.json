@@ -19,6 +19,7 @@
     "bcrypt": "^5.1.0",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.1",
+    "formidable-serverless": "^1.1.1",
     "formik": "^2.2.9",
     "mongoose": "^6.8.3",
     "next": "13.1.1",

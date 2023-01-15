@@ -1,3 +1,8 @@
+
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { Formik } from 'formik'
+
 import { 
     Button, 
     FormControl, 
@@ -8,27 +13,72 @@ import {
     MenuItem, 
     FormHelperText, 
     Input} from '@mui/material'
-
 import { Box, Container } from '@mui/system'
-import TemplateDefault from '../../../src/templates/Default'
-import { Formik } from 'formik'
 
 import {
     boxContainer,
     BoxTema,    
 } from './styles'
 
-import { initialValues, validationSchema } from './formValues'
+import TemplateDefault from '../../../src/templates/Default'
 import FileUpload from '../../../src/components/FileUpload'
+import { useToasty } from '../../../src/contexts/Toasty'
+import { initialValues, validationSchema } from './formValues'
 
+const Publish = ({ userId, image }) => {  
+    
+    const { setToasty } = useToasty()
+    const router = useRouter()
 
-const Publish = () => {      
+    const formValues = {
+        ...initialValues,
+    }
+
+    formValues.userId = userId
+    formValues.image = image
+
+    const handleSuccess = () => {
+        setToasty({
+            open:true,
+            text: 'Anúncio cadastrado com sucesso',
+            severity: 'success',
+        })
+
+       router.push('/user/dashboard')
+    }
+
+    const handleError = () => {
+        setToasty({
+            open: true,
+            text: 'Ops, ocorreu um erro, tente novamente',
+            severity: 'error',
+        })        
+    }
+
+    const handleSubmit = async (values) => {
+       const formData = new FormData()
+
+       for (let field in values) {
+        if (field === 'files') {
+            values.files.forEach(file => {
+                formData.append('files', file)
+            });
+        } else {
+            formData.append(field, values[field])
+        }
+       }
+
+       await axios.post('/api/produtcts', formData)
+        .then(handleSuccess)
+        .catch(handleError)
+    }    
+
     return (
     <TemplateDefault>        
         <Formik
-        initialValues={initialValues}
+        initialValues={formValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {console.log('ok, enviado', values)}}        
+        onSubmit={handleSubmit}       
         >
             {
                 ({

@@ -17,12 +17,13 @@ const Signin = ({ APP_URL }) => {
     const { data: session, status } = useSession()
     const loading = status === "loading"
 
-    const handleFormSubmit = values => {
-        signIn('credentials', {            
+    const handleFormSubmit = async (values) => {
+        await signIn('credentials', {            
             email: values.email,
-            password: values.password,
+            password: values.password,            
             callbackUrl: `${APP_URL}/user/dashboard`,
         })
+        console.log('ok, logado', values)
     }
 
     return (
