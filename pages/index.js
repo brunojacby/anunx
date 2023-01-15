@@ -1,7 +1,6 @@
 import React from 'react'
-import { CardActions, CardContent, Container, Card, CardMedia, Button,Grid, IconButton, InputBase, Paper, Typography } from '@mui/material'
+import { CardContent, Container, Card, CardMedia, Button,Grid, IconButton, InputBase, Paper, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
-import { Box } from '@mui/system'
 import TemplateDefault from '../src/templates/Default'
 
 const searchContainer = {

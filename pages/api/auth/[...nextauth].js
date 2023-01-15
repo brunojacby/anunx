@@ -1,21 +1,22 @@
-import axios from "axios"
-import NextAuth from "next-auth"
+import axios from 'axios'
+import NextAuth from 'next-auth'
+import CredentialsProvider from "next-auth/providers/credentials"
 
-export const authOptions = {  
-  providers: [
+export default NextAuth({  
+  providers: [      
     CredentialsProvider({
-        name: "Credentials",
-        async authorize(credentials) {
-            const res = await axios.post('http://localhost:3000/api/auth/sigin', credentials)       
-                       
-            const user = res.data
+      name: 'Credentials',
+      async authorize(credentials) {
+        const res = await axios.post(`${process.env.APP_URL}/api/auth/signin`, credentials)        
 
-            if (user) {
-                return user
-            } else {
-                throw '/auth/signin?i=1'
-            }
+        const user = await authResponse.json()       
+
+        if (user) {
+          return user
+        } else {
+          throw '/auth/signin?i=1'
         }
+      }
     })    
   ],
 
@@ -25,7 +26,7 @@ export const authOptions = {
 
   jwt: {
     secret: process.env.JWT_TOKEN,
-  }
-}
+  },
 
-export default NextAuth(authOptions)
+  database: process.env.MONGODB_URI,
+})

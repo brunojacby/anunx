@@ -3,22 +3,25 @@ import { Box, Container } from '@mui/system'
 import TemplateDefault from '../../../src/templates/Default'
 import { Formik } from 'formik'
 import { BoxTema, FormControlCSS } from './styles'
-import { signIn, useSession } from 'next-auth/client'
 import { initialValues, validationSchema } from './FormValues'
 import { useRouter } from 'next/router'
+import { useToasty } from '../../../src/contexts/Toasty'
+import Image from 'next/image'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 
-const Signin = () => {
+const Signin = ({ APP_URL }) => {
+
     const router = useRouter()
-    console.log(session)
-    
-    const [session] = useSession()
+    const setToasty = useToasty() 
+    const { data: session, status } = useSession()
+    const loading = status === "loading"
 
-  const handleFormSubmit = async values => {
-        signIn('credentials', {
+    const handleFormSubmit = values => {
+        signIn('credentials', {            
             email: values.email,
             password: values.password,
-            callbackUrl: 'http://localhost:3000/user/dashboard',
+            callbackUrl: `${APP_URL}/user/dashboard`,
         })
     }
 
@@ -32,6 +35,37 @@ const Signin = () => {
 
             <Container maxWidth="md">
                 <Box sx={BoxTema}>
+
+                    <Box display="flex" justifyContent="center">
+                        <Button
+                        variant='contained'
+                        color='primary'
+                        startIcon={
+                            <Image 
+                                src="/images/logoGoogle.png" width={20} height={20} alt="Google"
+                            />
+                        }
+                        >Entar com Google
+                        </Button>
+                    </Box>
+
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#e8e8e8',
+                        width: '100%',
+                        height: '1px',
+                        margin: '50px 0px', 
+                        
+                        '& span': {
+                            backgroundColor: 'white',
+                            padding: '0 30px',
+                        }
+                    }}>
+                        <span>ou</span>
+                    </Box>
+
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -109,5 +143,6 @@ const Signin = () => {
         </TemplateDefault>        
     )
 }
+
 
 export default Signin

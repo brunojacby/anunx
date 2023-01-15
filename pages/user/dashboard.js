@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Home() {
+const Home = () => {
   
   return (
     <TemplateDefault>
@@ -88,3 +88,5 @@ export default function Home() {
     </TemplateDefault>
   )
 }
+
+export default Home

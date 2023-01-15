@@ -5,7 +5,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../src/theme';
 import { ToastyProvider } from '../src/contexts/Toasty';
-import CredentialsProvider from "next-auth/providers/credentials"
+import { SessionProvider } from 'next-auth/react';
+import CheckAuth from '../src/components/CheckAuth';
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -15,15 +16,19 @@ export default function MyApp(props) {
       <Head>
         <title>Anunx</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-      </Head>      
-      <CredentialsProvider session={pageProps.session}> 
+      </Head>
+      <SessionProvider session={pageProps.session}>           
         <ThemeProvider theme={theme}>
           <ToastyProvider>
             <CssBaseline />
-            <Component {...pageProps} />
+            {
+              Component.requireAuth
+              ? <CheckAuth Component={Component} pageProps={pageProps}/>
+              : <Component {...pageProps} />
+            }            
           </ToastyProvider>
         </ThemeProvider>
-      </CredentialsProvider>       
+      </SessionProvider>             
     </React.Fragment>
   );
 }
