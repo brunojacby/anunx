@@ -10,18 +10,17 @@ import { Avatar, Menu, MenuItem } from '@mui/material';
 import Link from 'next/link'
 import { AccountCircle } from '@mui/icons-material';
 import { Container } from '@mui/system';
+import { useSession, signOut } from 'next-auth/react';
 
 const navBar = {
   display: 'flex',
   justifyContent: 'space-between',
-  alignItens: 'center',
-  textAlign: 'center',
+  alignItens: 'center',  
 }
 
+export default function ButtonAppBar({ user }) {
 
-
-export default function ButtonAppBar() {
-
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -30,6 +29,8 @@ export default function ButtonAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { data: session, status } = useSession()
 
   return (    
     <>
@@ -41,13 +42,12 @@ export default function ButtonAppBar() {
               My.com
             </Typography>
             </Link>
-            <Link href="/user/publish" style={{textDecoration: 'none', color: 'white'}}>
+            <Link href={session ? '/user/publish' : '/auth/signin' } style={{textDecoration: 'none', color: 'white'}}>
                 <Button color="inherit" variant="outlined">
                   Anunciar e Vender
                 </Button>
             </Link>
-
-
+                      
             <Button 
               id="basic-button"
               aria-controls={open ? 'basic-menu' : undefined}
@@ -59,14 +59,15 @@ export default function ButtonAppBar() {
             >
               {
                 true === false
-              ? <Avatar src=''/>
+              ? <Avatar />
               : <AccountCircle />
               }
               <Typography variant="h7" style={{marginLeft: 5}}>
-              Bruno Jacby
+                Criar Conta / Login
               </Typography>
-
             </Button>
+          
+
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -82,11 +83,11 @@ export default function ButtonAppBar() {
               </Link>
               <Link href="/user/publish" style={{textDecoration: 'none', color: 'black'}}>
                   <MenuItem>Publicar novo anúncio</MenuItem>
-              </Link>
-              <Link href="/" style={{textDecoration: 'none', color: 'black'}}>
-                  <MenuItem>Sair</MenuItem>
-              </Link>
-              
+              </Link>              
+              <MenuItem
+              onClick={() => signOut({ 
+                callbackUrl: '/'
+              })}>Sair</MenuItem>                           
             </Menu>
           </Toolbar>
         </Container>

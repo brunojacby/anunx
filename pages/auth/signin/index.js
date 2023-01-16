@@ -21,7 +21,7 @@ const Signin = ({APP_URL}) => {
       const status = await signIn('credentials', {
         redirect: false,
         email: values.email,        
-        callbackUrl: `/`
+        callbackUrl: `http://localhost:3000/user/dashboard`
     })
 
         if (status.ok) {

@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google";
 import users from '../../../src/models/users';
 import dbConnect from '../../../src/utils/dbConnect';
+import axios from 'axios';
 
 export default NextAuth({  
   providers: [    
@@ -21,33 +22,42 @@ export default NextAuth({
 
     CredentialsProvider({        
       name: 'Credentials',
-      async authorize(credentials, req) {
-        dbConnect().catch(error => {error: "Connection Failed...!"})
-           
-        const result = await users.findOne({email: credentials.email})
-           if (!result) {
-            throw '/auth/signin?i=1'
-        } 
+      async authorize(credentials) {
+        const res = await axios.post(`http://localhost:3000/api/auth/signin`, credentials)        
 
-        // const checkPassword = await compare(credentials.password, result.password)
+        const user = res.data        
 
-        if (result.email !== credentials.email) {
-          throw new Error("Username or Password doesn't match")
+        if (user) {
+          return user
+        } else {
+          throw '/auth/signin?i=1'
         }
-
-        return result
-
       }
-    })    
+    })
+    
   ],
 
   session: {
-    strategy: 'jwt',
     jwt: true,
   },
 
   jwt: {
     secret: process.env.JWT_TOKEN,
+  },
+
+  callbacks: {
+    async jwt (token, user) {
+      if (user) {
+        token.uid = user.id;
+      }
+  
+      return Promise.resolve(token)
+    },
+
+    async session(session, user) {
+      session.userId = user.uid
+      return session
+    }
   },
 
   database: process.env.MONGODB_URI,
