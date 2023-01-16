@@ -1,8 +1,12 @@
 import { Avatar, Button, Card, CardHeader, CardMedia, Chip, Grid, Paper, Typography } from "@mui/material"
 import { Box, Container } from "@mui/system"
 import React from "react"
-import TemplateDefault from '../../src/templates/Default'
+
+import TemplateDefault from '../../../src/templates/Default'
 import Carousel from 'react-material-ui-carousel'
+import dbConnect from "../../../src/utils/dbConnect"
+import ProductsModel from '../../../src/models/products'
+import { formatCurrency } from "../../../src/utils/currency"
 
 
 const box = {
@@ -39,7 +43,7 @@ const cardMedia = {
 }
 
 
-const Product = () => {
+const Product = ({product}) => {
 
     return (
         <TemplateDefault>
@@ -58,33 +62,30 @@ const Product = () => {
                                 }
                             }}
                             >
-                                <Card sx={card}>
-                                    <CardMedia 
-                                    sx={cardMedia}
-                                    image="https://source.unsplash.com/random?a=1"
-                                    title="Titulo da imagem"
-                                    />
-                                </Card>
-                                <Card sx={card}>
-                                    <CardMedia 
-                                    sx={cardMedia}
-                                    image="https://source.unsplash.com/random?a=2"
-                                    title="Titulo da imagem"
-                                    />
-                                </Card>                            
+                                {
+                                    product.files.map(file => (
+                                        <Card key={file.name} sx={card}>
+                                            <CardMedia 
+                                            sx={cardMedia}
+                                            image={`/uploads/${file.name}`}
+                                            title={product.title}
+                                            />
+                                        </Card>
+                                    ))
+                                }                                                                                         
                             </Carousel>
                         </Box>
 
-                        <Box sx={box}>
-                            <Typography component="h6" variant="h6" sx={titles}>Publicar</Typography>
-                            <Typography component="h4" variant="h4" sx={productName}>Jaguar</Typography>
-                            <Typography component="h4" variant="h4" sx={price}>R$ 50.000,00</Typography>
+                        <Box sx={box} textAlign="left">
+                            <Typography component="h6" variant="h6" sx={titles}>Publicado 15 de Janeiro de 2023</Typography>
+                            <Typography component="h4" variant="h4" sx={productName}>{product.title}</Typography>
+                            <Typography component="h4" variant="h4" sx={price}>{formatCurrency(product.price)}</Typography>
                             <Chip sx={chip} label="Categoria" />
                         </Box>
 
                         <Box sx={box}>                           
                             <Typography component="h6" variant="h6" >Descrição</Typography>
-                            <Typography component="p" variant="body2" >Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque alias odio quod, consequatur blanditiis facere corrupti. Enim assumenda beatae quos repudiandae distinctio consequuntur repellendus perferendis voluptatum aliquid error! Id, voluptatum!
+                            <Typography component="p" variant="body2" >{product.description}
                             </Typography>                            
                         </Box>
                     </Grid>
@@ -93,14 +94,16 @@ const Product = () => {
                         <Card elevation={0} sx={box}>
                             <CardHeader 
                                 avatar={
-                                    <Avatar>B</Avatar>
+                                    <Avatar src={product.user.image}>
+                                        { product.user.image || product.user.name[0] }
+                                    </Avatar>
                                 }
-                                title="Bruno Jacby"
-                                subheader="bruno@mail.com"
+                                title={product.user.name}
+                                subheader={product.user.email}
                             />
                             <CardMedia
-                                image="https://source.unsplash.com/random"
-                                title="Bruno Jacby"
+                                image={product.user.image}
+                                title={product.user.name}
                             />
                         </Card>
                         <Box sx={box}>
@@ -113,5 +116,19 @@ const Product = () => {
         </TemplateDefault>
     )
 }
+
+export async function getServerSideProps({ query }) {
+    const { id } = query
+  
+    await dbConnect()
+    
+    const product = await ProductsModel.findOne({ _id: id })
+  
+    return {
+      props: {
+        product: JSON.parse(JSON.stringify(product))
+      }    
+    }
+  }
 
 export default Product
