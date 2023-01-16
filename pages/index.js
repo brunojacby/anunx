@@ -67,7 +67,7 @@ const Home = ({ products }) => {
 
                     return (                
                     <Grid key={product._id} item xs={12} sm={6} md={4}>
-                    <Link href={`/categoria/nome/${product._id}`}>                        
+                    <Link href={`/categoria/nome/${product._id}`} style={{textDecoration: 'none', color: 'white'}}>                        
                         <Card
                             image={`/uploads/${product.files[0].name}`}
                             title={product.title}

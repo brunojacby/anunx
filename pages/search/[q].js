@@ -62,7 +62,7 @@ const List = ({products}) => {
 
                     return (                
                         <Grid key={product._id} item xs={12} sm={6} md={4}>
-                            <Link href={`/category/title/${product._id}`}>                                
+                            <Link href={`/category/title/${product._id}`} style={{textDecoration: 'none', color: 'white'}}>                                
                                 <Card
                                     image={`/uploads/${product.files[0].name}`}
                                     title={product.title}
