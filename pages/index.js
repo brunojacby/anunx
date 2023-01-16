@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CardContent, Container, Card, CardMedia, Button,Grid, IconButton, InputBase, Paper, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import TemplateDefault from '../src/templates/Default'
+import { useRouter } from 'next/router';
 
 const searchContainer = {
     padding: 10,
@@ -20,6 +21,16 @@ const cardGrid = {
 }
 
 const Home = () => {
+
+    const [search, setSearch] = useState()
+    const router = useRouter()
+
+    const handleSubmitSearch = () => {
+        router.push({
+            pathname: `/search/${search}`
+        })
+    }
+
     return (
         <TemplateDefault>
             <Container maxWidth="md" sx={searchContainer}>
@@ -28,10 +39,11 @@ const Home = () => {
                 </Typography>
                 <Paper sx={searchBox}>
                     <InputBase
+                    onChange={(e) => setSearch(e.target.value)}
                     placeholder='Ex.: iPhone 14 com garantia'
-                    fullWidth
+                    fullWidth                    
                     />                    
-                    <IconButton>
+                    <IconButton onClick={handleSubmitSearch}>
                         <SearchIcon />                                      
                     </IconButton>
                 </Paper>
@@ -87,7 +99,7 @@ const Home = () => {
                     />
                     <CardContent>
                         <Typography variant="h5" component="h2">
-                        Produto X
+                        Produto Y
                         </Typography>
                         <Typography variant="h5" component="h2">
                         R$ 20,00
