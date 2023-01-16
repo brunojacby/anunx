@@ -1,14 +1,15 @@
 import React from 'react'
 import Link from 'next/link';
 
-import { CardContent, Container, Card, CardMedia, Button,Grid, IconButton, InputBase, Paper, Typography } from '@mui/material'
+import { Container, CardMedia, Button, Grid, IconButton, InputBase, Paper, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 
-import slugify from 'slugify'
+//import slugify from 'slugify'
 import TemplateDefault from '../../src/templates/Default'
 import { formatCurrency } from '../../src/utils/currency'
 import ProductsModel from '../../src/models/products'
 
+import Card from '../../src/components/Card'
 
 const searchContainer = {
     padding: 10,
@@ -56,19 +57,17 @@ const List = ({products}) => {
                 <Grid container spacing={5}>
                 {
                     products.map(product => {
-                    const category = slugify(product.category).toLocaleLowerCase()
-                    const title = slugify(product.title).toLocaleLowerCase()
+                    //const category = slugify(product.category).toLocaleLowerCase()
+                    //const title = slugify(product.title).toLocaleLowerCase()
 
                     return (                
                         <Grid key={product._id} item xs={12} sm={6} md={4}>
-                            <Link href={`/${category}/${title}/${product._id}`}>
-                                <a>
+                            <Link href={`/category/title/${product._id}`}>                                
                                 <Card
                                     image={`/uploads/${product.files[0].name}`}
                                     title={product.title}
                                     subtitle={formatCurrency(product.price)}
-                                />
-                                </a>
+                                />                                
                             </Link>
                         </Grid>                        
                     )
