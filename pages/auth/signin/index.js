@@ -13,19 +13,21 @@ import { useSession, signIn, signOut } from "next-auth/react"
 const Signin = ({APP_URL}) => {
     const router = useRouter()      
 
-    const handleGoogleLogin = () => {
-        signIn('google', {
-          callbackUrl: `${APP_URL}/user/dashboard`
-        })
+   const handleGoogleLogin = async () => {
+       await signIn('google', { callbackUrl: `http://localhost:3000/user/dashboard` })
     }
  
-    const handleFormSubmit = values => {
-      signIn('credentials', {
-      email: values.email,
-      password: values.password,
-      callbackUrl: `${APP_URL}/user/dashboard`
+    const handleFormSubmit = async (values) => {
+      const status = await signIn('credentials', {
+        redirect: false,
+        email: values.email,        
+        callbackUrl: `/`
     })
-  }
+
+        if (status.ok) {
+            router.push(status.url)
+        }
+    }
 
     return (
         <TemplateDefault>
