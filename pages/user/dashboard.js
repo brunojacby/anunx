@@ -6,7 +6,11 @@ import Paper from '@mui/material/Paper';
 
 import Card from '../../src/components/Card'
 
+import ProductsModel from '../../src/models/products'
+import { getSession } from "next-auth/react"
+import dbConnect from '../../src/utils/dbConnect';
 
+import {formatCurrency} from '../../src/utils/currency'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -16,8 +20,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Home = () => {
+const Home = ({products}) => {
   
+  console.log(products)
+
   return (
     <TemplateDefault>
       <Container maxWidth="sm">
@@ -31,73 +37,40 @@ const Home = () => {
       </Container>
       <Container maxWidth="md">
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={4}> 
-            <Card            
-            image={'https://source.unsplash.com/random'}
-            title='Produto X'
-            subtitle='R$ 50,00'
-            actions={
-              <>
-              <Button size="small" color='primary'>Editar</Button>
-              <Button size="small" color='error'>Remover</Button>
-              </>
-            }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}> 
-            <Card            
-            image={'https://source.unsplash.com/random'}
-            title='Produto X'
-            subtitle='R$ 50,00'
-            actions={
-              <>
-              <Button size="small" color='primary'>Editar</Button>
-              <Button size="small" color='error'>Remover</Button>
-              </>
-            }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}> 
-            <Card            
-            image={'https://source.unsplash.com/random'}
-            title='Produto X'
-            subtitle='R$ 50,00'
-            actions={
-              <>
-              <Button size="small" color='primary'>Editar</Button>
-              <Button size="small" color='error'>Remover</Button>
-              </>
-            }
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}> 
-            <Card            
-            image={'https://source.unsplash.com/random'}
-            title='Produto X'
-            subtitle='R$ 50,00'
-            actions={
-              <>
-              <Button size="small" color='primary'>Editar</Button>
-              <Button size="small" color='error'>Remover</Button>
-              </>
-            }
-            />
-          </Grid>
+          {
+            products.map(product => (
+              <Grid key={product._id} item xs={12} sm={6} md={4}> 
+                <Card            
+                image={`/uploads/${product.files[0].name}`}
+                title={product.title}
+                subtitle={formatCurrency(product.price)}
+                actions={
+                  <>
+                  <Button size="small" color='primary'>Editar</Button>
+                  <Button size="small" color='error'>Remover</Button>
+                  </>
+                }
+                />
+              </Grid>
+            ))
+          }          
         </Grid>
       </Container>    
     </TemplateDefault>
   )
 }
 
-/* export async function getServerSideProps() {
-  const products = ProductsModel
+export async function getServerSideProps({req}) {
+  const session = await getSession({req})
+  await dbConnect()
+  const products = await ProductsModel.find({  })
   
   return {
     props: {
-      products,
+      products: JSON.parse(JSON.stringify(products)),
     }
   }
-} */
+}
 
 export default Home
 

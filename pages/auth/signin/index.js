@@ -10,21 +10,22 @@ import Image from 'next/image'
 import { useSession, signIn, signOut } from "next-auth/react"
 
 
-const Signin = ({ APP_URL }) => {
+const Signin = ({APP_URL}) => {
+    const router = useRouter()      
 
-    const router = useRouter()
-    const setToasty = useToasty() 
-    const { data: session, status } = useSession()
-    const loading = status === "loading"
-
-    const handleFormSubmit = async (values) => {
-        await signIn('credentials', {            
-            email: values.email,
-            password: values.password,            
-            callbackUrl: `${APP_URL}/user/dashboard`,
+    const handleGoogleLogin = () => {
+        signIn('google', {
+          callbackUrl: `${APP_URL}/user/dashboard`
         })
-        console.log('ok, logado', values)
     }
+ 
+    const handleFormSubmit = values => {
+      signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      callbackUrl: `${APP_URL}/user/dashboard`
+    })
+  }
 
     return (
         <TemplateDefault>
@@ -46,6 +47,7 @@ const Signin = ({ APP_URL }) => {
                                 src="/images/logoGoogle.png" width={20} height={20} alt="Google"
                             />
                         }
+                        onClick={handleGoogleLogin}
                         >Entar com Google
                         </Button>
                     </Box>
@@ -95,10 +97,11 @@ const Signin = ({ APP_URL }) => {
                                     <FormControl sx={FormControlCSS} error={errors.email && touched.email } fullWidth> 
                                         <InputLabel>E-mail</InputLabel>                          
                                         <Input
-                                            name='email'
+                                            name="email"
                                             type="email"
                                             value={values.email}
-                                            onChange={handleChange}                                          
+                                            onChange={handleChange} 
+                                                                                                                                 
                                         />
                                         <FormHelperText>
                                             { errors.email && touched.email ? errors.email : null }
@@ -108,10 +111,11 @@ const Signin = ({ APP_URL }) => {
                                     <FormControl sx={FormControlCSS} error={errors.password && touched.password } fullWidth> 
                                         <InputLabel>Senha</InputLabel>                          
                                         <Input
-                                            name='password'
+                                            name="password"
                                             type="password"
                                             value={values.password}
-                                            onChange={handleChange}                                          
+                                            onChange={handleChange}
+                                                                                        
                                         />
                                         <FormHelperText>
                                             { errors.password && touched.password ? errors.password : null }
