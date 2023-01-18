@@ -1,8 +1,10 @@
 # BJ - MY APP (FullStack Project)
 
-## ADVERTISING AND SALES WEBSITE
+## ADVERTISING AND SALES WEBSITE ⚡️
 
 Fullstack project, created with Next.js, creation of website for advertisement and sale of products, creation of user pages, registration, login with validations and creation of API with MongoDB for data storage.
+
+<img src="https://i.picasion.com/pic92/2561d433509a1f508db41bfaebd46e3a.gif" alt="photos" />
 
 ## Technologies 
 ![JavaScript](https://img.shields.io/badge/-JavaScript-black?style=flat-square&logo=javascript)
